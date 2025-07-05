@@ -116,3 +116,40 @@ For each text chunk, a vector embedding was generated. These embeddings were the
 
 *   **Jupyter Notebook:** The script that performs chunking, embedding, and indexing is available in `notebooks/chunk_embed_index.ipynb`.
 *   **Vector Store:** The persisted vector store, including the FAISS index and metadata, is saved in the `vector_store/` directory.
+
+## Task 3: Building the RAG Core Logic and Evaluation
+
+To build the retrieval and generation pipeline and, most importantly, to evaluate its effectiveness.
+
+### Retriever Implementation
+Create a function that takes a user's question (string) as input.
+- Embeds the question using the same model from Task 2.
+- Performs a similarity search against the vector store to retrieve the top-k most relevant text chunks. k=5 is a good starting point.
+
+### Prompt Engineering
+Design a robust prompt template. This is critical for guiding the LLM. The template should instruct the model to act as a helpful analyst, use only the provided context, and answer the user's question based on that context.
+
+**Example Template:**
+```
+You are a financial analyst assistant for CrediTrust. Your task is to answer questions about customer complaints. Use the following retrieved complaint excerpts to formulate your answer. If the context doesn't contain the answer, state that you don't have enough information.
+
+Context: {context}
+Question: {question}
+Answer:
+```
+
+### Generator Implementation
+- Combine the prompt, the user question, and the retrieved chunks.
+- Send the combined input to an LLM (e.g., using Hugging Face's pipeline or LangChain's integrations with Mistral, Llama, etc.).
+- Return the LLM's generated response.
+
+### Qualitative Evaluation
+This is the most important step.
+- Create a list of 5-10 representative questions you want your system to answer well.
+- For each question, run your RAG pipeline and analyze the results.
+- Create an evaluation table in your report (Markdown format is fine) with columns: `Question`, `Generated Answer`, `Retrieved Sources` (show 1-2), `Quality Score` (1-5), and `Comments/Analysis`.
+
+### Deliverables
+- Python modules (.py file) containing your RAG pipeline logic.
+- The evaluation table and your analysis in the final report, explaining what worked well and what could be improved.
+- The `src/rag_pipeline_and_evaluation.py` file contains the implementation of the RAG pipeline.
